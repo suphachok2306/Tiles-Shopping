@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>แชทบอท</title>
+        <link rel="stylesheet" href="chat.css" />
+        <link rel="stylesheet" href="admin.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    </head>
+    <body>
+        <div class="side" id="mySidebar">
+            <div class="side-header">
+            <h1>Tile Shopping</h1>
+            </div>
+            <hr style="border:1px solid; background-color:#8a7b6d; border-color:#3B3131;">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+            <a href="./payStatusUser.html" ><i class="fa-solid fa-users-line"></i> ประวัติการสั่งซื้อ</a>
+            <a href="./calTiles.html"  onclick="showCustomers()" ><i class="fa-solid fa-calculator"></i> คำนวณพื้นที่ในการสั่ง</a>
+            <a href="./chat.html"   onclick="showCategory()" ><i class="fa-brands fa-rocketchat"></i> แชทบอท</a>
+            <a href="./index.html"   onclick="showCategory()" ><i class="fa-solid fa-house"></i> กลับหน้าหลัก</a>              
+            </div>
+        <div id="main">
+            <button class="openbtn" onclick="openNav()"><i class="fa fa-bars"></i></button>
+        </div>
+        <div class="center">
+            <h1>ถามคำถามได้เลย</h1>
+            <!--<h2>Yeah,ask Some Question</h2>-->
+            <div class="input">
+                <input
+                    type="text"
+                    id="userBox"
+                    onkeydown="if(event.keyCode == 13){ talk()}"
+                    placeholder=" พิมพ์คำถาม..............."
+                />
+            </div>
+            <p id="chatLog">พิมพ์ keyword เช่น เปิด,ปิด,สวัสดี,hello,open
+                <br>
+                ใช้ได้ทั้งตัวพิมพ์เล็กและตัวพิมพ์ใหญ่  </p>
+        </div>
+        <script src="chat.js"></script>
+    </body>
+
+    
+    <script>
+        function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    //document.getElementById("main").style.marginLeft = "250px";  
+    //document.getElementById("main-content").style.marginLeft = "250px";
+    //document.getElementById("main").style.display="none";
+    }
+    
+    function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    //document.getElementById("main").style.marginLeft= "0";  
+    //document.getElementById("main").style.display="block";  
+    }
+    </script>
+</html>

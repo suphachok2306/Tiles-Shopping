@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TileShoping</title>
+
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">
+                <img src="./images/home.png" class="logonav">
+            </a>
+
+            <p class ="nav-profile-name">Tile Shopping</p>
+
+            <div class="nav-profile">
+                <br>
+                <div class="side" id="mySidebar">
+                    <div class="side-header">
+                    <h1>Tile Shopping</h1>
+                    </div>
+                    <hr style="border:1px solid; background-color:#8a7b6d; border-color:#3B3131;">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                    <a href="./payStatusUser.html" ><i class="fa-solid fa-users-line"></i> ประวัติการสั่งซื้อ</a>
+                    <a href="./calTiles.html"  onclick="showCustomers()" ><i class="fa-solid fa-calculator"></i> คำนวณพื้นที่ในการสั่ง</a>
+                    <a href="./chat.html"   onclick="showCategory()" ><i class="fa-brands fa-rocketchat"></i> แชทบอท</a>
+                    <a href="./index.html"   onclick="showCategory()" ><i class="fa-solid fa-house"></i> กลับหน้าหลัก</a>              
+                    </div>
+                <div id="main">
+                    <button class="openbtn" onclick="openNav()"><i class="fa fa-bars"></i></button>
+                </div>
+                <div class = "nameUser">
+                    <h1 id="welcome">Welcome</h1>
+                </div>
+                
+
+                <div onclick="openCart()" style="cursor: pointer;" class="nav-profile-cart">
+                    <i class="fas fa-cart-shopping"></i>
+                    <div id="cartcount" class="cartcount" style="display: none;"> 
+                        0
+                    </div>
+                </div>
+
+
+                    <button onclick = "goToLogout()" style="cursor: pointer;" class="btn btn-danger">ออกจากระบบ</button>
+                
+
+                <!--<h1 id="welcome" style="text-align: center;">Welcome</h1>-->
+
+                <div id="boxproduct" class="d-flex"></div>
+                
+                <!--<h1 id="nameUser" class="nav-profile-name">TileShoping</h1>-->
+                               
+                
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="sidebar">
+            
+            <input onkeyup="searchBar(this)" id="txt_search" type="text" class="sidebar-search" placeholder="ค้นหาสินค้า">
+
+            <input onclick="searchType('ทั้งหมด')" class="sidebar-items" type="submit" value="ทั้งหมด">
+            <input onclick="searchType('พื้น')" class="sidebar-items" type="submit" value="พื้น">
+            <input onclick="searchType('ผนัง')" class="sidebar-items" type="submit" value="ผนัง">
+            <input onclick="searchType('ดินเผา')" class="sidebar-items" type="submit" value="ดินเผา">
+            <input onclick="searchType('โมเสค')" class="sidebar-items" type="submit" value="โมเสค">
+            <input onclick="searchType('สระว่ายน้ำ')" class="sidebar-items" type="submit" value="สระว่ายน้ำ">
+            <input onclick="searchType('ปูภายนอก')" class="sidebar-items" type="submit" value="ปูภายนอก">
+            <input onclick="searchType('ยาแนว')" class="sidebar-items" type="submit" value="ยาแนว">
+
+            <!--<a onclick="searchType('all')" class="sidebar-items" >
+                All product
+            </a>
+
+            <a onclick="searchType('wall')" class="sidebar-items" >
+                Wall
+            </a>
+
+            <a onclick="searchType('floor')" class="sidebar-items">
+                Floor
+            </a>-->
+
+            <!--
+            <a href="#" class="sidebar-items">
+                Menu 4
+            </a>
+        -->
+        </div>
+        <div id="productlist" class="product">
+        </div>
+    </div>
+
+    <div id="modalDesc" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
+            <div class="modal-page">
+                <h2>รายละเอียด</h2>
+                <br>
+                <div class="modaldesc-content">
+                    <img id="mdd-img" class= "modaldesc-img" src="./images/teal.jpg" alt="">
+                    <div class="modaldesc-detail">
+                        <p id="mdd-name" style="font-size: 1.5vw;">Product name</p>
+                        <p id="mdd-price" style="font-size: 1.2vw;">500 THB</p>
+                        <br>
+                        <p id="mdd-desc" style="color: #adadad;">Lorem ipsumamet consectetur adipisicing elit. Reprehenderit necessitatibus, ctus omnis non quis amet, saepe fugit magni optio quaerat velit autem rerum minus aliquam nam? Modi ex nam debitis des.</p>
+                        <br>
+                        <div class="btn-control">
+                            <button onclick="closeModal()" class="btn">
+                                ปิด
+                            </button>
+                            <button onclick="addToCart()" class="btn btn-buy">
+                                นำเข้าตะกร้าสินค้า
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    
+    <div id="modalCart" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
+            <div class="modal-page">
+                <h2>ตะกร้าสินค้า</h2>
+                <br>
+                <div id="mycart" class="cartlist">
+
+                </div>
+                <div class="btn-control">
+                    <button onclick="closeModal()" class="btn">
+                        ยกเลิก
+                    </button>
+                    <button onclick= "buyNow()" class="btn btn-buy">
+                        ซื้อ
+                    </button>
+                </div>
+            </div>
+    </div>
+
+    <script>
+
+
+        //var getUser_id = localStorage.user_id;
+
+        function showOrderUser(){
+            $.ajax({
+                    url: './api/testorderuser.php',
+                    data: {
+                        user_id: localStorage.user_id
+                        //username: localStorage.username,
+                    }
+                })
+        }
+
+
+
+
+        
+        $("#welcome").text(localStorage.firstname)
+
+        function goToLogout() {
+            $.ajax({
+                    method: 'post',
+                    url: './api/logout.php',
+                    data: {
+                        token: localStorage.token
+                    }, success: (response) => {
+                        console.log('good',response)
+                        if(response.RespCode == 200){
+                            localStorage.clear();
+                            Swal.fire({
+                                icon: 'success',
+                                title: "ออกจากระบบสำเร็จ!",
+                                timer: 1000
+                            }).then(() => {
+                                window.location.href = './login.html'
+                            })
+                        }
+                        else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'มีบางอย่างผิดพลาด!'
+                            })
+                        }
+                    }, error: (err) => {
+                        console.log('bad',err)
+                    }
+                })
+        }
+    </script>
+    
+</body>
+</html>

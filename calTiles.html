@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="calTiles.css">
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>คำนวณจำนวนกระเบื้อง</title>
+</head>
+<body>
+    <div class="center">
+        <h1>คำนวณจำนวนกระเบื้องที่ต้องใช้ตามพื้นที่และเผื่อสำรอง</h1>
+    </div>
+    <div class="side" id="mySidebar">
+        <div class="side-header">
+        <h1>Tile Shopping</h1>
+        </div>
+        <hr style="border:1px solid; background-color:#8a7b6d; border-color:#3B3131;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="./payStatusUser.html" ><i class="fa-solid fa-users-line"></i> ประวัติการสั่งซื้อ</a>
+        <a href="./calTiles.html"  onclick="showCustomers()" ><i class="fa-solid fa-calculator"></i> คำนวณพื้นที่ในการสั่ง</a>
+        <a href="./chat.html"   onclick="showCategory()" ><i class="fa-brands fa-rocketchat"></i> แชทบอท</a>      
+        <a href="./index.html"   onclick="showCategory()" ><i class="fa-solid fa-house"></i> กลับหน้าหลัก</a>        
+        </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()"><i class="fa fa-bars"></i></button>
+    </div>
+	
+	<form class="inform">
+		<label for="width">ความกว้าง : </label>
+		<input type="number" id="width" name="width" required>
+        <label>เมตร</label><br><br>
+
+		
+		<label for="length">ความยาว : </label>
+		<input type="number" id="length" name="length" required>
+        <label>เมตร</label><br><br>
+
+
+        <label>ขนาดกระเบื้อง : </label>
+        <select class="sizeTiles" id="size" name="sizelist" form="sizeform">
+            <option value="choose" selected>เลือกขนาดกระเบื้อง</option>
+            <option >20x20ซม.</option>
+            <option >30x30ซม.</option>
+            <option >40x40ซม.</option>
+            <option >60x60ซม.</option>
+            <option >60x120ซม.</option>
+          </select><br><br>
+
+
+		<label for="spare">สำรองกระเบื้อง : </label>
+		<input class= "spare" type="number" id="spare" name="spare" required>
+        <label>(%)</label><br><br>
+
+        <label for="widthyanaw">ความกว้างของร่องยาแนว : </label>
+		<input type="number" id="widthyanaw" name="widthyanaw">
+        <label>มิลลิเมตร</label><br><br>
+
+		
+		<label for="depthyanaw">ความลึกของร่องยาแนว : </label>
+		<input type="number" id="depthyanaw" name="depthyanaw">
+        <label>มิลลิเมตร</label><br><br>
+
+
+		
+		<button type="button" onclick="Tiles()">คำนวณ</button>
+        <p id="areaRoom"></p>
+        <p id="poodai"></p>
+        <p id="oneBoxhave"></p>
+        <p id="totalBoxes"></p>
+        <p id="totalTiles"></p>
+        <p id="spareTiles"></p>
+        <p id="spareTotalTiles"></p>
+        <p id="spareTotalBoxes"></p>
+        <p id="totalYanaw"></p>
+	</form>
+
+    <div class="cal">
+
+    </div>
+	
+
+
+
+    <script>
+        function Tiles() {
+            if(document.getElementById("width").value == ''){
+                alert('กรุณากรอกความกว้าง');
+            }
+            else if(document.getElementById("length").value == ''){
+                alert('กรุณากรอกความยาว');
+            }
+            else if(document.getElementById("size").value == 'choose'){
+                alert('กรุณาเลือกขนาดของกระเบื้อง');
+            }
+            else if(document.getElementById("spare").value == ''){
+                alert('กรุณากรอกสำรองกระเบื้อง');
+            }
+            else if(document.getElementById("size").value != 'choose'){
+                if(document.getElementById("size").value == '20x20ซม.'){
+                //var poodai = 1;
+                //poodai = parseInt(tile2020);
+                //parseInt(tile2020);
+                //25แผ่น /กล่อง
+                var width = document.getElementById("width").value;
+			    var length = document.getElementById("length").value;
+                var areaRoom = width * length;
+                var poodai = 1;
+                var oneBoxhave = 25;
+
+
+                var widthyanaw = document.getElementById("widthyanaw").value;
+                var depthyanaw = document.getElementById("depthyanaw").value;
+                //var yanaw20 = 200;
+
+                
+                var totalBoxes = Math.ceil(areaRoom / poodai); 
+    
+                var totalTiles = Math.ceil((areaRoom / poodai) * oneBoxhave); 
+
+                var spareTiles = Math.ceil((totalTiles * (document.getElementById("spare").value)) / 100); 
+
+                var spareTotalTiles = totalTiles + spareTiles; 
+
+                var spareTotalBoxes = Math.ceil(spareTotalTiles / oneBoxhave);
+
+                //var useYanaw = (((yanaw20 + yanaw20) * widthyanaw * depthyanaw * 1.8) / (yanaw20 * yanaw20)) * 10;
+                var useYanaw = (((200 + 200) * widthyanaw * depthyanaw * 1.8) / (200 * 200)) * 10;
+                
+                var totalYanaw = (areaRoom / useYanaw).toFixed(2);
+
+                //
+                document.getElementById("areaRoom").innerHTML = "ขนาดของห้อง : " + areaRoom + " ตารางเมตร";
+                document.getElementById("poodai").innerHTML = "1 กล่อง นำไปปูได้ : " + poodai + " ตารางเมตร";
+                document.getElementById("oneBoxhave").innerHTML = "1 กล่อง มีกระเบื้องจำนวน : " + oneBoxhave + " แผ่น";
+                document.getElementById("totalBoxes").innerHTML = "จำนวนกล่อง : " + totalBoxes + " กล่อง";
+                document.getElementById("totalTiles").innerHTML = "จำนวนแผ่น : " + totalTiles + " แผ่น";
+                document.getElementById("spareTiles").innerHTML = "สำรอง : " + spareTiles + " แผ่น";
+                document.getElementById("spareTotalTiles").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalTiles + " แผ่น";
+                document.getElementById("spareTotalBoxes").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalBoxes + " กล่อง";
+                document.getElementById("totalYanaw").innerHTML = "ต้องใช้ยาแนว : " + totalYanaw + " กิโลกรัม";
+            }
+            else if(document.getElementById("size").value == '30x30ซม.'){
+                //var poodai = 1;
+                //poodai = parseInt(tile2020);
+                //parseInt(tile2020);
+                //11แผ่น /กล่อง
+                var width = document.getElementById("width").value;
+			    var length = document.getElementById("length").value;
+                var areaRoom = width * length;
+                var poodai = 1;
+                var oneBoxhave = 11;
+
+                var totalBoxes = Math.ceil(areaRoom / poodai); 
+    
+                var totalTiles = Math.ceil((areaRoom / poodai) * oneBoxhave); 
+
+                var spareTiles = Math.ceil((totalTiles * (document.getElementById("spare").value)) / 100); 
+
+                var spareTotalTiles = totalTiles + spareTiles;
+
+                var spareTotalBoxes = Math.ceil(spareTotalTiles / oneBoxhave);
+
+                var widthyanaw = document.getElementById("widthyanaw").value;
+                var depthyanaw = document.getElementById("depthyanaw").value;
+                //var yanaw20 = 200;
+                var useYanaw = (((300 + 300) * widthyanaw * depthyanaw * 1.8) / (300 * 300)) * 10;
+                
+                var totalYanaw = (areaRoom / useYanaw).toFixed(2);
+
+                //
+                document.getElementById("areaRoom").innerHTML = "ขนาดของห้อง : " + areaRoom + " ตารางเมตร";
+                document.getElementById("poodai").innerHTML = "1 กล่อง นำไปปูได้ : " + poodai + " ตารางเมตร";
+                document.getElementById("oneBoxhave").innerHTML = "1 กล่อง มีกระเบื้องจำนวน : " + oneBoxhave + " แผ่น";
+                document.getElementById("totalBoxes").innerHTML = "จำนวนกล่อง : " + totalBoxes + " กล่อง";
+                document.getElementById("totalTiles").innerHTML = "จำนวนแผ่น : " + totalTiles + " แผ่น";
+                document.getElementById("spareTiles").innerHTML = "สำรอง : " + spareTiles + " แผ่น";
+                document.getElementById("spareTotalTiles").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalTiles + " แผ่น";
+                document.getElementById("spareTotalBoxes").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalBoxes + " กล่อง";
+                document.getElementById("totalYanaw").innerHTML = "ต้องใช้ยาแนว : " + totalYanaw + " กิโลกรัม";
+            }
+            else if(document.getElementById("size").value == '40x40ซม.'){
+                //var poodai = 1;
+                //poodai = parseInt(tile2020);
+                //parseInt(tile2020);
+                //6แผ่น /กล่อง
+                var width = document.getElementById("width").value;
+			    var length = document.getElementById("length").value;
+                var areaRoom = width * length;
+                var poodai = 1;
+                var oneBoxhave = 6;
+
+                var totalBoxes = Math.ceil(areaRoom / poodai);
+    
+                var totalTiles = Math.ceil((areaRoom / poodai) * oneBoxhave);
+
+                var spareTiles = Math.ceil((totalTiles * (document.getElementById("spare").value)) / 100);
+
+                var spareTotalTiles = totalTiles + spareTiles;
+
+                var spareTotalBoxes = Math.ceil(spareTotalTiles / oneBoxhave);
+
+                var widthyanaw = document.getElementById("widthyanaw").value;
+                var depthyanaw = document.getElementById("depthyanaw").value;
+                //var yanaw20 = 200;
+                var useYanaw = (((400 + 400) * widthyanaw * depthyanaw * 1.8) / (400 * 400)) * 10;
+                
+                var totalYanaw = (areaRoom / useYanaw).toFixed(2);
+
+                //
+                document.getElementById("areaRoom").innerHTML = "ขนาดของห้อง : " + areaRoom + " ตารางเมตร";
+                document.getElementById("poodai").innerHTML = "1 กล่อง นำไปปูได้ : " + poodai + " ตารางเมตร";
+                document.getElementById("oneBoxhave").innerHTML = "1 กล่อง มีกระเบื้องจำนวน : " + oneBoxhave + " แผ่น";
+                document.getElementById("totalBoxes").innerHTML = "จำนวนกล่อง : " + totalBoxes + " กล่อง";
+                document.getElementById("totalTiles").innerHTML = "จำนวนแผ่น : " + totalTiles + " แผ่น";
+                document.getElementById("spareTiles").innerHTML = "สำรอง : " + spareTiles + " แผ่น";
+                document.getElementById("spareTotalTiles").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalTiles + " แผ่น";
+                document.getElementById("spareTotalBoxes").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalBoxes + " กล่อง"; 
+                document.getElementById("totalYanaw").innerHTML = "ต้องใช้ยาแนว : " + totalYanaw + " กิโลกรัม";
+            }
+            else if(document.getElementById("size").value == '60x60ซม.'){
+                //var poodai = 1.44;
+                //poodai = parseInt(tile2020);
+                //parseInt(tile2020);
+                //4แผ่น /กล่อง
+                var width = document.getElementById("width").value;
+			    var length = document.getElementById("length").value;
+                var areaRoom = width * length;//196ตารางเมตร
+                var poodai = 1.44;
+                var oneBoxhave = 4;
+
+                var totalBoxes = Math.ceil(areaRoom / poodai); //137 กล่อง
+    
+                var totalTiles = Math.ceil((areaRoom / poodai) * oneBoxhave); //545 แผ่น
+
+                var spareTiles = Math.ceil((totalTiles * (document.getElementById("spare").value)) / 100); // 17แผ่น
+
+                var spareTotalTiles = totalTiles + spareTiles; //562 แผ่น
+
+                var spareTotalBoxes = Math.ceil(spareTotalTiles / oneBoxhave); //141 กล่อง
+
+                var widthyanaw = document.getElementById("widthyanaw").value;
+                var depthyanaw = document.getElementById("depthyanaw").value;
+                //var yanaw20 = 200;
+                var useYanaw = (((600 + 600) * widthyanaw * depthyanaw * 1.8) / (600 * 600)) * 10;
+                
+                var totalYanaw = (areaRoom / useYanaw).toFixed(2);
+
+                //
+                document.getElementById("areaRoom").innerHTML = "ขนาดของห้อง : " + areaRoom + " ตารางเมตร";
+                document.getElementById("poodai").innerHTML = "1 กล่อง นำไปปูได้ : " + poodai + " ตารางเมตร";
+                document.getElementById("oneBoxhave").innerHTML = "1 กล่อง มีกระเบื้องจำนวน : " + oneBoxhave + " แผ่น";
+                document.getElementById("totalBoxes").innerHTML = "จำนวนกล่อง : " + totalBoxes + " กล่อง";
+                document.getElementById("totalTiles").innerHTML = "จำนวนแผ่น : " + totalTiles + " แผ่น";
+                document.getElementById("spareTiles").innerHTML = "สำรอง : " + spareTiles + " แผ่น";
+                document.getElementById("spareTotalTiles").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalTiles + " แผ่น";
+                document.getElementById("spareTotalBoxes").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalBoxes + " กล่อง"; 
+                document.getElementById("totalYanaw").innerHTML = "ต้องใช้ยาแนว : " + totalYanaw + " กิโลกรัม";
+            }
+            else if(document.getElementById("size").value == '60x120ซม.'){
+                //var poodai = 1.44;
+                //poodai = parseInt(tile2020);
+                //parseInt(tile2020);
+                //2แผ่น /กล่อง
+                var width = document.getElementById("width").value;
+			    var length = document.getElementById("length").value;
+                var areaRoom = width * length;
+                var poodai = 1.44;
+                var oneBoxhave = 2;
+
+                var totalBoxes = Math.ceil(areaRoom / poodai); 
+    
+                var totalTiles = Math.ceil((areaRoom / poodai) * oneBoxhave); 
+
+                var spareTiles = Math.ceil((totalTiles * (document.getElementById("spare").value)) / 100);
+
+                var spareTotalTiles = totalTiles + spareTiles;
+
+                var spareTotalBoxes = Math.ceil(spareTotalTiles / oneBoxhave);
+
+                var widthyanaw = document.getElementById("widthyanaw").value;
+                var depthyanaw = document.getElementById("depthyanaw").value;
+                //var yanaw20 = 200;
+                var useYanaw = (((600 + 1200) * widthyanaw * depthyanaw * 1.8) / (600 * 1200)) * 10;
+                
+                var totalYanaw = (areaRoom / useYanaw).toFixed(2);
+
+                //
+                document.getElementById("areaRoom").innerHTML = "ขนาดของห้อง : " + areaRoom + " ตารางเมตร";
+                document.getElementById("poodai").innerHTML = "1 กล่อง นำไปปูได้ : " + poodai + " ตารางเมตร";
+                document.getElementById("oneBoxhave").innerHTML = "1 กล่อง มีกระเบื้องจำนวน : " + oneBoxhave + " แผ่น";
+                document.getElementById("totalBoxes").innerHTML = "จำนวนกล่อง : " + totalBoxes + " กล่อง";
+                document.getElementById("totalTiles").innerHTML = "จำนวนแผ่น : " + totalTiles + " แผ่น";
+                document.getElementById("spareTiles").innerHTML = "สำรอง : " + spareTiles + " แผ่น";
+                document.getElementById("spareTotalTiles").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalTiles + " แผ่น";
+                document.getElementById("spareTotalBoxes").innerHTML = "ต้องใช้กระเบื้องทั้งหมดจำนวน : " + spareTotalBoxes + " กล่อง"; 
+                document.getElementById("totalYanaw").innerHTML = "ต้องใช้ยาแนว : " + totalYanaw + " กิโลกรัม";
+            }
+            }
+		}
+	</script>
+
+
+    <script>
+        function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    //document.getElementById("main").style.marginLeft = "250px";  
+    //document.getElementById("main-content").style.marginLeft = "250px";
+    //document.getElementById("main").style.display="none";
+    }
+    
+    function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    //document.getElementById("main").style.marginLeft= "0";  
+    //document.getElementById("main").style.display="block";  
+    }
+    </script>
+</body>
+</html>

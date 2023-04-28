@@ -1,0 +1,52 @@
+
+.side {
+  height: 100%;
+  width: 0; 
+  position: fixed;
+  z-index: 1; 
+  top: 0;
+  left: 0;
+  background-color: #b3e5fc;
+  overflow-x: hidden; 
+  padding-top: 60px; 
+  transition: 0.5s;
+}
+
+.side a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+  display: block;
+  transition: 0.3s;
+}
+
+.side .side-header{
+      margin-left: 30px;
+      margin-bottom: 8px;
+      color: black;
+  }
+
+.side a:hover {
+  background-color: #01579b;
+}
+
+.side .closebtn {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  font-size: 34px;
+  margin-left: 50px;
+}
+
+.openbtn {
+  margin-right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px 15px;
+  background-color: #5cadff;
+}
+
+.openbtn:hover {
+  color: #ECDAC9;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TileShoping</title>
+
+    <link rel="stylesheet" href="payAll.css">
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+<body>
+    <div class="side" id="mySidebar">
+        <div class="side-header">
+        <h1>Tile Shopping</h1>
+        </div>
+        <hr style="border:1px solid; background-color:#8a7b6d; border-color:#3B3131;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="./payStatusUser.html" ><i class="fa-solid fa-users-line"></i> ประวัติการสั่งซื้อ</a>
+        <a href="./calTiles.html"  onclick="showCustomers()" ><i class="fa-solid fa-calculator"></i> คำนวณพื้นที่ในการสั่ง</a>
+        <a href="./chat.html"   onclick="showCategory()" ><i class="fa-brands fa-rocketchat"></i> แชทบอท</a>   
+        <a href="./index.html"   onclick="showCategory()" ><i class="fa-solid fa-house"></i> กลับหน้าหลัก</a>           
+        </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()"><i class="fa fa-bars"></i></button>
+    </div>
+
+    <br>
+    <div id="pay" class="payQR"></div>
+
+
+
+
+</body>
+<script>
+    function openNav() {
+document.getElementById("mySidebar").style.width = "250px";
+//document.getElementById("main").style.marginLeft = "250px";  
+//document.getElementById("main-content").style.marginLeft = "250px";
+//document.getElementById("main").style.display="none";
+}
+
+function closeNav() {
+document.getElementById("mySidebar").style.width = "0";
+//document.getElementById("main").style.marginLeft= "0";  
+//document.getElementById("main").style.display="block";  
+}
+</script>
+
+<script>
+
+    $(document).ready(() => {
+            $.ajax({
+                method: 'post',
+                url: './api/statusUser.php',
+                data: {
+                    token: localStorage.token
+                },success: (response) => {
+                    console.log('good',response)
+                    if(response.RespCode == 200){
+                        var html ='';
+                        for (var i = 0; i < response.Result.length; i++) {
+                            html += `<div class="card"> 
+                                    <h1 class="user_id" id="user_id" >user_id : ${response.Result[i].user_id}</h1>                 
+                                    <h1 class="transid" id="transid" >รหัสรายการ : ${response.Result[i].transid}</h1>
+                                    <h1 class="user_id" id="user_id" >วันที่ทำรายการ : ${response.Result[i].updated_at}</h1>
+                                    <h1 class="netamount" id="netamount" >ราคารวมทั้งหมด : ${numberWithCommas(response.Result[i].netamount)} บาท</h1>
+                                    <h1 class="operation" id="operation" >สถานะรายการ : ${response.Result[i].operation}</h1>                                                               
+                                    </div>
+                                    <div class = "line">
+                                    <h1>----------------------------------------------------------------</h1>
+                                    </div>`;
+                        }
+                        //<h1 class="netamount" id="netamount" >วันที่ทำรายการ: ${response.Result[i].updated_at}</h1>
+                        //<h1 class="operation" id="operation" >สถานะรายการ: ${response.Result[i].operation}</h1>      
+                        $("#pay").html(html)
+                    }
+                    else if(response.RespCode == 400 & response.Log == 4){
+                        console.log('not have product in cart.')
+
+                    }
+                },error: (err) => {
+                    console.log('bad', err)
+                }
+            })
+        })
+
+
+function numberWithCommas(x) {
+    x = x.toString();
+    var pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(x))
+        x = x.replace(pattern, "$1,$2");
+    return x;
+}
+
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+</html>
+
+
+
